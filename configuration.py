@@ -11,6 +11,8 @@ CONFIG = {
     # s = segments per event group; g = skipped segments between groups.
     # A matching window spans 3*s + 2*g segments; offsets use image axes.
     "layers": [[4, 4, 0, 7, -2, 2], [8, 8, -1, 1, -1, 1]],
+    # Matching-window stride in readout segments (integer >= 1).
+    # Choose based on the desired sampling interval and particle displacement between successive windows.
     "stride_segments": 8,
     "polarity": "ON",
     "row_jump_threshold_px": 200,
