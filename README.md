@@ -8,16 +8,6 @@ Code accompanying **Readout-adaptive event-based velocimetry under continuous il
 
 *Round jet, Re = 3,500. (a) Events accumulated over 4 readout segments (axes in px). (b) Selected layer: cyan = Layer 0, magenta = Layer 1. (c) Velocity field colored by speed (m/s; axes in m). Equal-length arrows show direction. All valid cells are displayed; panels are mirrored horizontally and played in slow motion.*
 
-## Processing pipeline
-
-```mermaid
-flowchart LR
-    A["Readout segments"] --> B["Triplet matching<br/>in two temporal layers"]
-    B --> C["Velocity fitting"]
-    C --> D["c × c px cells<br/>and layer selection"]
-    D --> E["Velocity fields<br/>and flow statistics"]
-```
-
 ## Installation
 
 Download or clone this repository and run the commands below from its root folder. Tested with Python 3.9.13 on Windows 10; no GPU is required.
