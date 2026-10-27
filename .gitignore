@@ -1,0 +1,27 @@
+__pycache__/
+*.py[cod]
+*.nbc
+*.nbi
+.venv/
+venv/
+.env
+.DS_Store
+Thumbs.db
+results/
+*.raw
+*.raw.tmp_index
+*.raw.tmp_map
+*.tmp
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+
+# Experimental data is excluded until a sample release is approved.
+/sample_data/
+/tests/fixtures/
+*.npz
+*.npy
+*.csv
+*.h5
+*.hdf5
