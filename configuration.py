@@ -35,7 +35,7 @@ CONFIG = {
 #     "stride_segments": 20,
 #     "max_windows": 200000,
 #     "min_valid_samples": 1,
-#     "spatial_scale_m_per_px": 2.2222222222222223e-05,
+#     "spatial_scale_m_per_px": 2.22e-05,
 # }
 
 # Pipe flow, Re = 19,000:
@@ -45,7 +45,7 @@ CONFIG = {
 #     "stride_segments": 6,
 #     "max_windows": 200000,
 #     "min_valid_samples": 1,
-#     "spatial_scale_m_per_px": 2.2222222222222223e-05,
+#     "spatial_scale_m_per_px": 2.22e-05,
 # }
 
 # Round jet, Re = 3,500:
@@ -65,5 +65,5 @@ CONFIG = {
 #     "stride_segments": 12,
 #     "max_windows": 100000,
 #     "min_valid_samples": 2,
-#     "spatial_scale_m_per_px": 5.4945054945054945e-05,
+#     "spatial_scale_m_per_px": 5.49e-05,
 # }
