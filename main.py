@@ -12,7 +12,7 @@ from ebv.pipeline import run
 
 def main():
     parser = argparse.ArgumentParser(description="Readout-adaptive triplet velocimetry")
-    parser.add_argument("--input", required=True, help="Metavision .raw or structured-event .npz")
+    parser.add_argument("--input", required=True, help="Metavision .raw/.hdf5 or structured-event .npz")
     parser.add_argument("--config", default=str(Path(__file__).with_name("configuration.py")),
                         help="Configuration file (default: configuration.py beside main.py)")
     parser.add_argument("--flow", help="Override ACTIVE_FLOW, e.g. pipe5300 or jet3500")

@@ -16,7 +16,7 @@ Download or clone this repository and run the commands below from its root folde
 python -m pip install -r requirements.txt
 ```
 
-For RAW recordings, also install the [Metavision SDK](https://docs.prophesee.ai/stable/installation/index.html) with compatible Python bindings (tested with SDK 4.6.2).
+For RAW or Metavision HDF5 recordings, also install the [Metavision SDK](https://docs.prophesee.ai/stable/installation/index.html) with compatible Python bindings (tested with SDK 4.6.2).
 
 Sample recordings are not currently included.
 
@@ -27,6 +27,8 @@ All settings are in [configuration.py](configuration.py), with presets for pipe,
 ```bash
 python main.py --input /path/to/recording.raw --output results/my_run --workers 4 --save-vectors
 ```
+
+For an HDF5 recording converted with the Metavision SDK, use its `.hdf5` path with the same command.
 
 The output folder contains velocity vectors, flow statistics, timestamps and the settings used. Omit `--save-vectors` if you only need statistics. Set `--workers` to choose the number of CPU workers.
 

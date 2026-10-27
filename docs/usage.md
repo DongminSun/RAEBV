@@ -4,7 +4,7 @@ See the [README](../README.md) for installation. Run commands from the repositor
 
 ## Input
 
-Use a Metavision `.raw` recording or an `.npz` file containing a structured NumPy array named `events`:
+Use a Metavision `.raw` recording, an SDK-converted `.hdf5` recording, or an `.npz` file containing a structured NumPy array named `events`:
 
 | Field | Format |
 |---|---|
@@ -12,7 +12,14 @@ Use a Metavision `.raw` recording or an `.npz` file containing a structured NumP
 | `t` | Timestamp in microseconds, in nondecreasing order |
 | `p` | Polarity: 0 = OFF, 1 = ON |
 
-Recordings must contain a detectable row-wise readout pattern. RAW files require the Metavision SDK; NPZ files do not.
+Recordings must contain a detectable row-wise readout pattern. RAW and HDF5 files require the Metavision SDK; NPZ files do not. HDF5 support is for the SDK event format, using the lowercase `.hdf5` extension, rather than arbitrary HDF5 layouts.
+
+To convert a RAW recording with the SDK and process it:
+
+```bash
+metavision_file_to_hdf5 -i recording.raw -o recording.hdf5
+python main.py --input recording.hdf5 --output results/hdf5_run --workers 4 --save-vectors
+```
 
 ## Configuration and execution
 

@@ -1,4 +1,4 @@
-"""Read RAW/NPZ events and form readout segments without fixed-time matching."""
+"""Read RAW/HDF5/NPZ events and form readout segments without fixed-time matching."""
 from collections import deque
 from pathlib import Path
 import numpy as np
@@ -7,15 +7,15 @@ CHUNK_US = 10_000
 
 
 def event_chunks(path, roi, start_us=0, stop_us=None):
-    """Yield ROI-local structured events; RAW timestamps remain absolute."""
+    """Yield ROI-local structured events without resetting chunk timestamps."""
     path = Path(path)
-    if path.suffix.lower() == ".raw":
+    if path.suffix.lower() == ".raw" or path.suffix == ".hdf5":
         try:
             from metavision_core.event_io import EventsIterator
         except ImportError as exc:
             raise RuntimeError(
-                "RAW input requires the Prophesee Metavision SDK in this Python environment. "
-                "The bundled NPZ example works without the SDK."
+                "RAW/HDF5 input requires the Prophesee Metavision SDK in this Python environment. "
+                "Structured-event NPZ input works without the SDK."
             ) from exc
         args = dict(start_ts=int(start_us), delta_t=CHUNK_US, relative_timestamps=False)
         if stop_us is not None:
@@ -40,7 +40,7 @@ def event_chunks(path, roi, start_us=0, stop_us=None):
                 pos = end
         source = batches()
     else:
-        raise ValueError("Supported inputs are .raw and structured-event .npz files")
+        raise ValueError("Supported inputs are Metavision .raw/.hdf5 and structured-event .npz files")
     x0, y0, w, h = (roi[k] for k in ("x", "y", "width", "height"))
     for ev in source:
         keep = ((ev["x"] >= x0) & (ev["x"] < x0+w) &
@@ -83,7 +83,7 @@ def window_length(c):
 
 
 def build_index(path, c, count, progress=None):
-    """Discover timestamps from RAW; no historical frame_times file is required."""
+    """Discover timestamps from events; no historical frame_times file is required."""
     buf, times = deque(), []
     need = window_length(c)
     for seg in segments(event_chunks(path, c["roi"]), c["row_jump_threshold_px"]):
@@ -101,7 +101,7 @@ def build_index(path, c, count, progress=None):
 
 
 def windows_range(path, c, index, first, stop):
-    """Replay exactly indexed windows after a bounded RAW seek."""
+    """Replay exactly indexed windows after a bounded seek."""
     if not 0 <= first < stop <= len(index):
         raise ValueError((first, stop, len(index)))
     seek_us = max(0, int(index[first, 0])-CHUNK_US) // CHUNK_US * CHUNK_US
