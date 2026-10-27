@@ -16,7 +16,7 @@ Download or clone this repository and run the commands below from its root folde
 python -m pip install -r requirements.txt
 ```
 
-For RAW or Metavision HDF5 recordings, also install the [Metavision SDK](https://docs.prophesee.ai/stable/installation/index.html) with compatible Python bindings (tested with SDK 4.6.2).
+For recordings in .raw or .hdf5 format recorded with Metavision SDK, also install the [Metavision SDK](https://docs.prophesee.ai/stable/installation/index.html) with compatible Python bindings (tested with SDK 4.6.2).
 
 Sample recordings are not currently included.
 
