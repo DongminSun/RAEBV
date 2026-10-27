@@ -24,6 +24,7 @@ COMMON = {
 # s = segments per event group; g = skipped segments between groups.
 # Search offsets use the original image axes. A window has 3*s + 2*g segments.
 # spatial_scale_m_per_px converts pixel distances to metres.
+# max_windows is used when neither --windows nor --duration is supplied.
 FLOWS = {
     # Pipe flow, Re = 5,300
     "pipe5300": {

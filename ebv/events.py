@@ -82,21 +82,31 @@ def window_length(c):
     return max(3*s + 2*g for s, g, *_ in c["layers"])
 
 
-def build_index(path, c, count, progress=None):
-    """Discover timestamps from events; no historical frame_times file is required."""
+def build_index(path, c, count=None, progress=None, stop_us=None):
+    """Index a window count or all complete windows ending before stop_us."""
+    if (count is None) == (stop_us is None):
+        raise ValueError("Specify either a window count or a stop timestamp")
+    if count is not None and (type(count) is not int or count <= 0):
+        raise ValueError("Window count must be a positive integer")
+    if stop_us is not None and (type(stop_us) is not int or stop_us <= 0):
+        raise ValueError("Stop timestamp must be a positive integer in microseconds")
     buf, times = deque(), []
     need = window_length(c)
-    for seg in segments(event_chunks(path, c["roi"]), c["row_jump_threshold_px"]):
+    for seg in segments(event_chunks(path, c["roi"], stop_us=stop_us), c["row_jump_threshold_px"]):
         buf.append(seg)
         if len(buf) < need:
             continue
         times.append((int(buf[0]["t"][0]), int(buf[-1]["t"][-1])))
         if progress and len(times) % 10000 == 0:
             progress(len(times))
-        if len(times) == count:
+        if count is not None and len(times) == count:
             return np.asarray(times, dtype=np.int64)
         for _ in range(c["stride_segments"]):
             buf.popleft()
+    if stop_us is not None:
+        if not times:
+            raise RuntimeError("No complete matching windows within the requested duration")
+        return np.asarray(times, dtype=np.int64)
     raise RuntimeError(f"Input contains only {len(times)} complete windows; requested {count}")
 
 

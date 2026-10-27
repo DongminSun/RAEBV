@@ -22,15 +22,31 @@ Sample recordings are not currently included.
 
 ## Run on your data
 
-All settings are in [configuration.py](configuration.py), with presets for pipe, jet and cylinder-wake flows. Leave one `ACTIVE_FLOW` line uncommented. Adjust the ROI, spatial calibration, layer settings, cell size and stride for your recording, then run:
+All settings are in [configuration.py](configuration.py), with presets for pipe, jet and cylinder-wake flows. Leave one `ACTIVE_FLOW` line uncommented. Adjust the ROI, spatial calibration, layer settings, cell size and stride for your recording.
+
+Successive matching windows are advanced by a prescribed stride, expressed as an integer number of readout segments. The minimum possible stride is one segment; larger strides may be selected based on the time interval required for a suitable particle displacement between successive matching windows.
+
+First, calculate and save a specified number of instantaneous velocity fields:
 
 ```bash
-python main.py --input /path/to/recording.raw --output results/my_run --workers 4 --save-vectors
+python main.py --input /path/to/recording.raw --output results/my_run --windows 10000 --workers 4
 ```
 
-For an HDF5 recording converted with the Metavision SDK, use its `.hdf5` path with the same command.
+Alternatively, use `--duration` to process a specified recording duration in seconds:
 
-The output folder contains velocity vectors, flow statistics, timestamps and the settings used. Omit `--save-vectors` if you only need statistics. Set `--workers` to choose the number of CPU workers.
+```bash
+python main.py --input /path/to/recording.hdf5 --output results/my_run --duration 10 --workers 4
+```
+
+Choose one command. MAIN always saves the instantaneous fields, timestamps and settings. RAW and SDK-converted HDF5 files use the same calculation. Speed-gate calibration uses the first `calibration_windows` windows (5,000 in the presets), independently of the number or duration of fields saved.
+
+Then compute flow statistics from the saved fields:
+
+```bash
+python postprocess.py --input results/my_run --workers 4
+```
+
+Mean velocities, RMS fluctuations and Reynolds shear stress are saved in `results/my_run/statistics/`. Postprocessing uses the saved cell velocities directly, without additional spatial averaging. `--workers` selects the number of CPU worker processes.
 
 See the [usage guide](docs/usage.md) for input formats, additional options and output units.
 
