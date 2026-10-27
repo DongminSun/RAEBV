@@ -1,4 +1,4 @@
-# Readout-adaptive event-based velocimetry (EBV)
+# Readout-adaptive event-based velocimetry (RAEBV)
 
 Python code for reconstructing velocity fields from event-camera recordings under continuous illumination.
 
