@@ -23,7 +23,7 @@ python main.py --input recording.hdf5 --output results/hdf5_run --windows 10000 
 
 ## Instantaneous velocity fields
 
-In [configuration.py](../configuration.py), select one `ACTIVE_FLOW` and adjust `COMMON` and the corresponding `FLOWS` entry. Comments explain the ROI, layer settings, cell size, stride, window count and spatial scale in m/px.
+Edit `CONFIG` in [configuration.py](../configuration.py) directly. This single dictionary supplies all processing parameters. Comments explain the ROI, layer settings, cell size, stride, window count and spatial scale in m/px. The paper's flow settings are comments for reference; copy the desired values into `CONFIG` when needed.
 
 ```bash
 python main.py --input recording.raw --output results/my_run --windows 10000 --workers 4
@@ -31,18 +31,17 @@ python main.py --input recording.raw --output results/my_run --windows 10000 --w
 
 | Option | Purpose |
 |---|---|
-| `--flow pipe5300` | Override the selected flow |
 | `--config path/to/configuration.py` | Use another configuration file; saved `config.json` files are also accepted |
 | `--windows N` | Save exactly N instantaneous fields |
 | `--duration S` | Save complete matching windows within the first S recorded seconds |
 | `--workers N` | Set CPU worker count; default is 1 |
 | `--gate-file path/to/gate.json` | Reuse calibration for a matching configuration and the same recording |
 
-Choose either `--windows` or `--duration`; if neither is given, `max_windows` from the flow preset is used. Duration is measured from timestamp zero in the decoded recording, not wall-clock processing time. Only complete matching windows ending before the time limit are saved. The actual count and covered duration are recorded in `complete.json`; a shorter recording ends at its last complete window.
+Choose either `--windows` or `--duration`; if neither is given, `CONFIG["max_windows"]` is used. Duration is measured from timestamp zero in the decoded recording, not wall-clock processing time. Only complete matching windows ending before the time limit are saved. The actual count and covered duration are recorded in `complete.json`; a shorter recording ends at its last complete window.
 
 MAIN always saves vectors and does not compute flow statistics. The old `--save-vectors` option is still accepted for existing commands, but is no longer needed.
 
-Speed-gate calibration still uses the first `calibration_windows` windows (5,000 in the presets). For a shorter output selection, calibration can read beyond the requested number or duration; only the requested instantaneous fields are saved. If the recording is too short for calibration, provide a compatible `--gate-file` from the same recording.
+Speed-gate calibration uses the first `calibration_windows` windows (default: 5,000). For a shorter output selection, calibration can read beyond the requested number or duration; only the requested instantaneous fields are saved. If the recording is too short for calibration, provide a compatible `--gate-file` from the same recording.
 
 Rerun the same command to resume completed blocks. Use a new output folder when changing input, settings, selection or code. Use `python main.py --help` for all options.
 

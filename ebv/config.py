@@ -1,32 +1,41 @@
-"""Explicit, portable settings for the four final paper cases."""
+"""Load and validate user-provided processing parameters."""
+from copy import deepcopy
 import json
 import runpy
 from pathlib import Path
 
 
-def load_config(path, flow=None):
+def load_config(path):
     path = Path(path)
     if path.suffix.lower() == ".py":
         module = runpy.run_path(str(path))
-        get_config = module.get("get_config")
-        if not callable(get_config):
-            raise ValueError("Python configuration must define get_config(flow=None)")
-        c = get_config(flow)
+        if "CONFIG" not in module:
+            raise ValueError("Python configuration must define a CONFIG dictionary")
+        c = module["CONFIG"]
     else:
         # Effective JSON snapshots from earlier runs remain readable.
         with path.open(encoding="utf-8") as fh:
             c = json.load(fh)
-        if flow is not None and c.get("name") != flow:
-            raise ValueError("Selected flow does not match the JSON configuration")
+    return validate_config(c)
+
+
+def validate_config(c):
+    if not isinstance(c, dict):
+        raise ValueError("Configuration must be a dictionary")
     required = {
-        "name", "flow", "reynolds_number", "roi", "layers", "stride_segments",
+        "roi", "layers", "stride_segments",
         "cell_size_px", "trajectory_tolerance_px", "polarity",
         "row_jump_threshold_px", "calibration_windows", "histogram_max_px_per_ms",
         "histogram_bins", "histogram_smoothing_bins", "max_windows",
         "min_valid_samples", "spatial_scale_m_per_px",
     }
-    if set(c) != required:
-        raise ValueError(f"Configuration keys differ: missing={required-set(c)}, extra={set(c)-required}")
+    # Old saved JSONs and gate files may include descriptive flow labels.
+    # They never select parameters and are not needed for processing.
+    legacy_labels = {"name", "flow", "reynolds_number"}
+    missing, extra = required-set(c), set(c)-required-legacy_labels
+    if missing or extra:
+        raise ValueError(f"Configuration keys differ: missing={missing}, extra={extra}")
+    c = deepcopy({k: v for k, v in c.items() if k not in legacy_labels})
     if c["polarity"] != "ON":
         raise ValueError("The released paper pipeline uses ON-event matching.")
     for name in ("stride_segments", "cell_size_px", "row_jump_threshold_px",
@@ -40,7 +49,7 @@ def load_config(path, flow=None):
     if any(type(v) is not int for v in roi.values()) or min(roi["x"], roi["y"]) < 0 or min(roi["width"], roi["height"]) <= 0:
         raise ValueError("Invalid ROI")
     if len(c["layers"]) != 2:
-        raise ValueError("Paper presets require exactly two layers")
+        raise ValueError("Matching requires exactly two temporal layers")
     for layer in c["layers"]:
         if len(layer) != 6 or any(type(v) is not int for v in layer):
             raise ValueError("Each layer must be [s, g, xmin, xmax, ymin, ymax]")

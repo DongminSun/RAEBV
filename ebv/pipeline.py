@@ -4,7 +4,7 @@ import hashlib
 import json
 import time
 import numpy as np
-from .config import write_json
+from .config import validate_config, write_json
 from .events import build_index, windows_range
 from .estimator import estimate_layers, select_vectors, histogram, gate_from_histogram
 from .execution import BLOCK_SIZE, implementation_hash, jobs as _jobs
@@ -117,12 +117,12 @@ def run(source, c, output, windows=None, workers=1, gate_file=None, duration=Non
     calibration.mkdir(exist_ok=True)
     if gate_file:
         loaded = json.loads(Path(gate_file).read_text(encoding="utf-8"))
-        if loaded.get("config") != c:
+        if validate_config(loaded.get("config")) != c:
             raise ValueError("Saved calibration configuration does not match this run")
         gate = float(loaded["speed_gate_pxs"])
         if not np.isfinite(gate) or gate < 0:
             raise ValueError("Invalid saved speed gate")
-        gate_info = {**loaded, "source": "provided_calibration"}
+        gate_info = {**loaded, "config": c, "source": "provided_calibration"}
     else:
         calibration_index = index_path
         if windows < c["calibration_windows"]:
