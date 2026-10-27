@@ -2,7 +2,7 @@
 
 Python code for reconstructing velocity fields from event-camera recordings under continuous illumination.
 
-Code accompanying **Readout-adaptive event-based velocimetry under continuous illumination**, by **Dongmin Sun and Hyungmin Park**, Multiphase Flow & Flow Visualization Laboratory, Seoul National University.
+Code accompanying **Readout-adaptive event-based velocimetry under continuous illumination**, by **Dongmin Sun and Hyungmin Park**, Multiphase Flow & Flow Visualization Laboratory, Department of Mechanical Engineering, Seoul National University.
 
 ![Real-event jet reconstruction](assets/sample.gif)
 
