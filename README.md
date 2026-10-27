@@ -6,7 +6,7 @@ Code accompanying **Readout-adaptive event-based velocimetry under continuous il
 
 ![Real-event jet reconstruction](assets/sample.gif)
 
-*Round jet, Re = 3,500. (a) Events accumulated over 4 readout segments (axes in px). (b) Selected layer: cyan = Layer 0, magenta = Layer 1. (c) Velocity field colored by speed (m/s; axes in m). Equal-length arrows show direction. All valid cells are displayed; panels are mirrored horizontally and played in slow motion.*
+*Round jet, Re = 3,500. (a) Events accumulated over 4 readout segments (px). (b) Selected layer: cyan = Layer 0, magenta = Layer 1. (c) Velocity vectors colored by speed (m/s; positions in m). Equal-length arrows indicate direction. Horizontally mirrored; slow-motion playback.*
 
 ## Installation
 
@@ -22,7 +22,7 @@ Sample recordings are not currently included.
 
 ## Run on your data
 
-Edit the single `CONFIG` dictionary in [configuration.py](configuration.py) directly: set the ROI, spatial calibration, layer settings, cell size and stride for your recording. The paper's flow settings are included only as commented examples.
+Set the ROI, spatial calibration, layers, cell size and stride in `CONFIG` in [configuration.py](configuration.py). Flow settings from the paper are provided as commented examples.
 
 Successive matching windows are advanced by a prescribed stride, expressed as an integer number of readout segments. The minimum possible stride is one segment; larger strides may be selected based on the time interval required for a suitable particle displacement between successive matching windows.
 
@@ -38,7 +38,7 @@ Alternatively, use `--duration` to process a specified recording duration in sec
 python main.py --input /path/to/recording.hdf5 --output results/my_run --duration 10 --workers 4
 ```
 
-Choose one command. MAIN always saves the instantaneous fields, timestamps and settings. RAW and SDK-converted HDF5 files use the same calculation. Speed-gate calibration uses the first `calibration_windows` windows (default: 5,000), independently of the number or duration of fields saved.
+Each run saves instantaneous fields, timestamps and settings. See the [usage guide](docs/usage.md) for speed-gate calibration and shorter recordings.
 
 Then compute flow statistics from the saved fields:
 
@@ -52,4 +52,4 @@ See the [usage guide](docs/usage.md) for input formats, additional options and o
 
 ## License
 
-[MIT License](LICENSE). The example GIF uses this project's own experimental data.
+[MIT License](LICENSE).

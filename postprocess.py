@@ -9,8 +9,8 @@ from ebv.postprocessing import run
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Flow statistics from saved EBV cell vectors")
-    parser.add_argument("--input", required=True, help="Completed MAIN output folder containing vectors")
+    parser = argparse.ArgumentParser(description="Flow statistics from saved RAEBV cell vectors")
+    parser.add_argument("--input", required=True, help="Completed main.py output folder containing vectors")
     parser.add_argument("--output", help="Statistics folder (default: INPUT/statistics)")
     parser.add_argument("--workers", type=int, default=1, help="Parallel block workers (default: 1)")
     args = parser.parse_args()

@@ -1,8 +1,4 @@
-"""Numerical kernels for readout-adaptive event-based velocimetry.
-
-Extracted from the verified final MAIN implementation. Candidate enumeration,
-Numba options, regression arithmetic and reduction ordering are preserved.
-"""
+"""Numerical kernels for readout-adaptive event-based velocimetry (RAEBV)."""
 import math
 import numpy as np
 from numba import njit
@@ -158,8 +154,6 @@ def _binned_layer_to_maps(binned, w, h, bin_size):
     if len(bb) == 0:
         return maps, mask
 
-    # The layer-wise binner already returns unique cells, but assignment is kept
-    # simple and robust.
     for j in range(6):
         maps[j][gy, gx] = bb[:, j]
     mask[gy, gx] = bb[:, 4] > WEIGHT_EPS
@@ -167,23 +161,13 @@ def _binned_layer_to_maps(binned, w, h, bin_size):
 
 
 def fuse_layers_speed_gated_bin(lr, w, h, bin_size, speed_gate_pxs):
-    """Return normal 5-column fused vectors after layer-wise binning.
+    """Bin each layer and select one velocity per cell.
 
-    Stage 2:
-      Each layer is first binned using triplet-count-weighted averaging in
-      `_bin_one_layer_for_gated_fusion()`. The weight is the raw vector's
-      surviving triplet count.
+    Cell velocities are weighted by accepted-triplet counts. Where both
+    layers are valid, select layer 1 if the layer-0 speed is below the gate,
+    otherwise select layer 0. Where only one layer is valid, retain it.
 
-    Stage 3:
-      - single layer: keep layer 0
-      - layer0_only: keep layer 0
-      - layer1_only: keep layer 1
-      - both: use layer0 speed as the hard gate
-          S0 < gate  -> layer 1
-          S0 >= gate -> layer 0
-
-    Output columns:
-        [x, y, u, v, layer_id]
+    Output columns: [x, y, u, v, layer_id].
     """
     if lr is None or len(lr) == 0:
         return None
@@ -378,7 +362,7 @@ def process_triplet_v8(
     trajectory_tol_px,
 ):
     """
-    v8 strict: co-linear triplet matching with uniform averaging.
+    Match collinear event triplets and average their velocities.
 
     For each current event:
       1. For each prev event in search radius, define a constant-velocity trajectory
@@ -387,8 +371,7 @@ def process_triplet_v8(
          at its own timestamp is <= trajectory_tol_px
       4. Compute velocity (3-point linear fit) and accumulate uniformly
 
-    No Gaussian scoring, no K_SIGMA. The strict trajectory tolerance is radial
-    and is 0.5 px in the supplied paper configurations.
+    trajectory_tol_px specifies the radial trajectory tolerance in pixels.
 
     Output columns: [x, y, vx, vy, count, count]
     """
@@ -502,7 +485,7 @@ def process_triplet_v8(
                                 sum_vy += vyt
                                 cnt    += 1
 
-        # --- Finalize this event ---
+        # Mean velocity over accepted triplets.
         if cnt == 0:
             continue
 

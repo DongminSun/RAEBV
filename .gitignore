@@ -17,7 +17,7 @@ dist/
 *.egg-info/
 .pytest_cache/
 
-# Experimental data is excluded until a sample release is approved.
+# Experimental data and generated outputs.
 /sample_data/
 /tests/fixtures/
 *.npz

@@ -1,4 +1,4 @@
-"""Read RAW/HDF5/NPZ events and form readout segments without fixed-time matching."""
+"""Read RAW/HDF5/NPZ events and form readout segments."""
 from collections import deque
 from pathlib import Path
 import numpy as np
@@ -54,7 +54,7 @@ def event_chunks(path, roi, start_us=0, stop_us=None):
 
 
 def segments(chunks, jump=200):
-    """Preserve the final-run boundary convention, including a shared event."""
+    """Split events at row resets; adjacent segments share the boundary event."""
     previous_y = None
     pending = []
     started = False

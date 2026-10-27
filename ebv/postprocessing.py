@@ -1,4 +1,4 @@
-"""Compute flow statistics from saved MAIN cell vectors, without event input."""
+"""Compute flow statistics from saved cell velocity fields."""
 from pathlib import Path
 import hashlib
 import json

@@ -1,4 +1,4 @@
-"""Configure the unchanged matching kernels without notebook globals."""
+"""Estimate layer velocities and select cell vectors."""
 import numpy as np
 from . import core
 

@@ -12,7 +12,7 @@ Use a Metavision `.raw` recording, an SDK-converted `.hdf5` recording, or an `.n
 | `t` | Timestamp in microseconds, in nondecreasing order |
 | `p` | Polarity: 0 = OFF, 1 = ON |
 
-Recordings must contain a detectable row-wise readout pattern. RAW and HDF5 files require the Metavision SDK; NPZ files do not. HDF5 support is for the SDK event format, using the lowercase `.hdf5` extension, rather than arbitrary HDF5 layouts.
+Recordings must contain a detectable row-wise readout pattern. RAW and HDF5 files require the Metavision SDK; NPZ files do not. HDF5 input must use the SDK event format and the lowercase `.hdf5` extension.
 
 To convert a RAW recording with the SDK and process it:
 
@@ -23,7 +23,7 @@ python main.py --input recording.hdf5 --output results/hdf5_run --windows 10000 
 
 ## Instantaneous velocity fields
 
-Edit `CONFIG` in [configuration.py](../configuration.py) directly. This single dictionary supplies all processing parameters. Comments explain the ROI, layer settings, cell size, stride, window count and spatial scale in m/px. The paper's flow settings are comments for reference; copy the desired values into `CONFIG` when needed.
+Enter your processing parameters in `CONFIG` in [configuration.py](../configuration.py). Spatial calibration is in m/px; flow settings from the paper are provided as commented examples.
 
 ```bash
 python main.py --input recording.raw --output results/my_run --windows 10000 --workers 4
@@ -37,15 +37,15 @@ python main.py --input recording.raw --output results/my_run --windows 10000 --w
 | `--workers N` | Set CPU worker count; default is 1 |
 | `--gate-file path/to/gate.json` | Reuse calibration for a matching configuration and the same recording |
 
-Choose either `--windows` or `--duration`; if neither is given, `CONFIG["max_windows"]` is used. Duration is measured from timestamp zero in the decoded recording, not wall-clock processing time. Only complete matching windows ending before the time limit are saved. The actual count and covered duration are recorded in `complete.json`; a shorter recording ends at its last complete window.
+Choose either `--windows` or `--duration`; if neither is given, `CONFIG["max_windows"]` is used. Duration is measured from timestamp zero in the decoded recording, not wall-clock processing time. Only complete matching windows ending before the time limit are saved. The actual count and covered duration are recorded in `complete.json`. With `--duration`, a shorter recording ends at its last complete window; `--windows N` requires at least N complete windows.
 
-MAIN always saves vectors and does not compute flow statistics. The old `--save-vectors` option is still accepted for existing commands, but is no longer needed.
+`main.py` saves one velocity field per matching window. Run `postprocess.py` afterward to compute statistics.
 
 Speed-gate calibration uses the first `calibration_windows` windows (default: 5,000). For a shorter output selection, calibration can read beyond the requested number or duration; only the requested instantaneous fields are saved. If the recording is too short for calibration, provide a compatible `--gate-file` from the same recording.
 
 Rerun the same command to resume completed blocks. Use a new output folder when changing input, settings, selection or code. Use `python main.py --help` for all options.
 
-MAIN outputs:
+Instantaneous-field outputs:
 
 | File | Contents |
 |---|---|
@@ -55,7 +55,7 @@ MAIN outputs:
 | `calibration/gate.json` | Calibration for reuse |
 | `complete.json` | Completion summary and analyzed duration |
 
-Additional files in `calibration/` and `blocks/` support calibration and resuming MAIN. Each vector row represents one valid cell; empty cells remain missing. Coordinates are local to the configured ROI and follow the original image-axis directions.
+Additional files in `calibration/` and `blocks/` store calibration data and processing progress. Each vector row represents one valid cell; empty cells remain missing. Coordinates are local to the configured ROI and follow the original image-axis directions.
 
 ## Separate postprocessing
 
@@ -63,7 +63,7 @@ Additional files in `calibration/` and `blocks/` support calibration and resumin
 python postprocess.py --input results/my_run --workers 4
 ```
 
-This reads saved vectors and computes cell-wise statistics. The original recording and Metavision SDK are not needed. Completed folders from earlier versions also work if vectors were saved for every window.
+This computes cell-wise statistics from the saved vectors. The original recording and Metavision SDK are not needed.
 
 Results are written to `results/my_run/statistics/` by default. Use `--output path/to/statistics` to choose another folder. Repeating the same command resumes completed statistics blocks; use a new output folder if the saved vectors or settings change.
 

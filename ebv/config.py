@@ -13,7 +13,7 @@ def load_config(path):
             raise ValueError("Python configuration must define a CONFIG dictionary")
         c = module["CONFIG"]
     else:
-        # Effective JSON snapshots from earlier runs remain readable.
+        # Load settings saved by a processing run.
         with path.open(encoding="utf-8") as fh:
             c = json.load(fh)
     return validate_config(c)
@@ -29,8 +29,7 @@ def validate_config(c):
         "histogram_bins", "histogram_smoothing_bins", "max_windows",
         "min_valid_samples", "spatial_scale_m_per_px",
     }
-    # Old saved JSONs and gate files may include descriptive flow labels.
-    # They never select parameters and are not needed for processing.
+    # Ignore descriptive flow labels in saved configurations.
     legacy_labels = {"name", "flow", "reynolds_number"}
     missing, extra = required-set(c), set(c)-required-legacy_labels
     if missing or extra:

@@ -1,4 +1,6 @@
-"""Edit CONFIG directly for your recording. Examples below are comments only."""
+"""Processing parameters for RAEBV."""
+
+# Default settings: round jet, Re = 3,500.
 
 CONFIG = {
     "roi": {"x": 0, "y": 0, "width": 1280, "height": 720},
@@ -24,9 +26,7 @@ CONFIG = {
     "min_valid_samples": 10,
 }
 
-# Paper examples for reference. Copy the desired values into CONFIG above.
-# These commented values are not loaded or selected by the program.
-# The current CONFIG values correspond to the round-jet example.
+# Flow settings from the paper. Copy values into CONFIG as needed.
 
 # Pipe flow, Re = 5,300:
 # {

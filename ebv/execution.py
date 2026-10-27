@@ -1,9 +1,9 @@
-"""Shared deterministic block execution and implementation identity."""
+"""Run processing blocks and identify the code version for resuming."""
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 import hashlib
 
-BLOCK_SIZE = 5000  # Preserve the final reference's statistics reduction order.
+BLOCK_SIZE = 5000  # Fixed block size for reproducible statistics reduction.
 
 
 def implementation_hash():
