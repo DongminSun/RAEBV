@@ -25,6 +25,8 @@ python main.py --input recording.hdf5 --output results/hdf5_run --windows 10000 
 
 Enter your processing parameters in `CONFIG` in [configuration.py](../configuration.py). Spatial calibration is in m/px; flow settings from the paper are provided as commented examples.
 
+The current implementation requires two temporal layers and uses ON events (`p = 1`) for triplet matching. Keep `polarity` set to `"ON"`; OFF and mixed-polarity matching are not supported. Parameter units and ranges are described beside each setting in `configuration.py`.
+
 ```bash
 python main.py --input recording.raw --output results/my_run --windows 10000 --workers 4
 ```
