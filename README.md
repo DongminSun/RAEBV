@@ -24,6 +24,8 @@ Sample recordings are not currently included.
 
 Set the ROI, spatial calibration, layers, cell size and stride in `CONFIG` in [configuration.py](configuration.py). Flow settings from the paper are provided as commented examples.
 
+Set `polarity` to `"ON"`, `"OFF"` or `"BOTH"`. In `"BOTH"` mode, triplets are matched within each polarity and combined into cell velocities.
+
 Successive matching windows are advanced by a prescribed stride, expressed as an integer number of readout segments. The minimum possible stride is one segment; larger strides may be selected based on the time interval required for a suitable particle displacement between successive matching windows.
 
 First, calculate and save a specified number of instantaneous velocity fields:

@@ -28,13 +28,14 @@ CONFIG = {
     # Must not exceed max(3*s + 2*g) over the two layers.
     "stride_segments": 8,
 
-    # Fixed option: only "ON" (p = 1) is supported for triplet matching.
-    # "OFF" and mixed-polarity matching are not supported by this pipeline.
+    # "ON": p = 1 only; "OFF": p = 0 only; "BOTH": use both event polarities.
+    # In BOTH mode, each triplet contains events of the same polarity.
+    # Cell velocities combine the accepted ON and OFF triplets.
     "polarity": "ON",
 
     # Readout reset threshold in pixels (positive integer): split segments when
     # previous_y - next_y > this value. Adapt to the row-reset jump in your recording.
-    # Reset detection uses all input events within the ROI, before ON-only matching.
+    # Reset detection uses all input events within the ROI, independent of matching polarity.
     "row_jump_threshold_px": 200,
 
     # Spatial calibration in metres per pixel (> 0), used for SI statistics export.

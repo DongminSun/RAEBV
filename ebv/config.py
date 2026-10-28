@@ -4,6 +4,8 @@ import json
 import runpy
 from pathlib import Path
 
+POLARITY_MODES = {"ON": 0, "OFF": 1, "BOTH": 2}
+
 
 def load_config(path):
     path = Path(path)
@@ -35,8 +37,8 @@ def validate_config(c):
     if missing or extra:
         raise ValueError(f"Configuration keys differ: missing={missing}, extra={extra}")
     c = deepcopy({k: v for k, v in c.items() if k not in legacy_labels})
-    if c["polarity"] != "ON":
-        raise ValueError("The released paper pipeline uses ON-event matching.")
+    if not isinstance(c["polarity"], str) or c["polarity"] not in POLARITY_MODES:
+        raise ValueError('polarity must be "ON", "OFF" or "BOTH"')
     for name in ("stride_segments", "cell_size_px", "row_jump_threshold_px",
                  "calibration_windows", "histogram_bins", "histogram_smoothing_bins",
                  "max_windows", "min_valid_samples"):

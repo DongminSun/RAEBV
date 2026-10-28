@@ -1,10 +1,12 @@
 """Estimate layer velocities and select cell vectors."""
 import numpy as np
 from . import core
+from .config import POLARITY_MODES
 
 
 def estimate_layers(snap, c):
     w, h = c["roi"]["width"], c["roi"]["height"]
+    polarity_mode = POLARITY_MODES[c["polarity"]]
     layers = []
     for s, g, xmin, xmax, ymin, ymax in c["layers"]:
         past, middle, current = core.build_triplet(snap, s, g)
@@ -17,7 +19,7 @@ def estimate_layers(snap, c):
         layers.append(core.process_triplet_v8(
             current["x"], current["y"], current["t"], current["p"],
             mx, my, mt, mp, mg, px, py, pt, pp, pg, w, h,
-            xmin, xmax, ymin, ymax, 0, 0.0, 7000e8,
+            xmin, xmax, ymin, ymax, polarity_mode, 0.0, 7000e8,
             tmin, tmax, c["trajectory_tolerance_px"]))
     return layers
 

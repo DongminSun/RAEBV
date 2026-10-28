@@ -25,7 +25,9 @@ python main.py --input recording.hdf5 --output results/hdf5_run --windows 10000 
 
 Enter your processing parameters in `CONFIG` in [configuration.py](../configuration.py). Spatial calibration is in m/px; flow settings from the paper are provided as commented examples.
 
-The current implementation requires two temporal layers and uses ON events (`p = 1`) for triplet matching. Keep `polarity` set to `"ON"`; OFF and mixed-polarity matching are not supported. Parameter units and ranges are described beside each setting in `configuration.py`.
+The implementation uses two temporal layers. Set `polarity` to `"ON"` for ON events (`p = 1`), `"OFF"` for OFF events (`p = 0`), or `"BOTH"` to use both. In `"BOTH"` mode, each triplet contains events of the same polarity; accepted ON and OFF triplets contribute to the cell velocity. Readout segmentation uses all events within the ROI in every mode. Parameter units and ranges are described beside each setting in `configuration.py`.
+
+Recalculate the speed gate after changing polarity. A saved `--gate-file` must match the selected polarity and other configuration values. Automatic calibration requires events of the selected polarity and valid cell velocities in both layers.
 
 ```bash
 python main.py --input recording.raw --output results/my_run --windows 10000 --workers 4
