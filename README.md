@@ -1,3 +1,4 @@
+
 # Readout-adaptive event-based velocimetry (RAEBV)
 
 Python code for reconstructing velocity fields from event-camera recordings under continuous illumination.
@@ -7,6 +8,8 @@ Code accompanying **Readout-adaptive event-based velocimetry under continuous il
 ![Real-event jet reconstruction](assets/sample.gif)
 
 *Round jet, Re = 3,500. (a) Events accumulated over 4 readout segments (px). (b) Selected layer: cyan = Layer 0, magenta = Layer 1. (c) Velocity vectors colored by speed (m/s; positions in m). Equal-length arrows indicate direction. Horizontally mirrored; slow-motion playback.*
+
+https://github.com/user-attachments/assets/f2c387a0-9480-4a76-907f-f548476bbca5
 
 ## Installation
 
