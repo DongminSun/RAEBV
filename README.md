@@ -9,7 +9,7 @@ Code accompanying **Readout-adaptive event-based velocimetry under continuous il
 
 *Round jet, Re = 3,500. (a) Events accumulated over 4 readout segments (px). (b) Selected layer: cyan = Layer 0, magenta = Layer 1. (c) Velocity vectors colored by speed (m/s; positions in m). Equal-length arrows indicate direction. Horizontally mirrored; slow-motion playback.*
 
-https://github.com/user-attachments/assets/16784bf2-9a4c-48e3-8321-c29a4838c4a4
+https://github.com/user-attachments/assets/27f86354-8539-4ba9-a839-a7d88662877b
 
 *Demonstration Video: Overall Workflow of the Proposed Algorithm*
 
