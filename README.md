@@ -5,10 +5,6 @@ Python code for reconstructing velocity fields from event-camera recordings unde
 
 Code accompanying **Readout-adaptive event-based velocimetry under continuous illumination**, by **Dongmin Sun and Hyungmin Park**, Multiphase Flow & Flow Visualization Laboratory, Department of Mechanical Engineering, Seoul National University.
 
-![Real-event jet reconstruction](assets/sample.gif)
-
-*Round jet, Re = 3,500. (a) Events accumulated over 4 readout segments (px). (b) Selected layer: cyan = Layer 0, magenta = Layer 1. (c) Velocity vectors colored by speed (m/s; positions in m). Equal-length arrows indicate direction. Horizontally mirrored; slow-motion playback.*
-
 https://github.com/user-attachments/assets/59fc1d9c-024b-4a27-827b-95d56e28d073
 
 *Demonstration Video: Overall Workflow of the Proposed Algorithm*
