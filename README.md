@@ -5,7 +5,7 @@ Python code for reconstructing velocity fields from event-camera recordings unde
 
 Code accompanying **Readout-adaptive event-based velocimetry under continuous illumination**, by **Dongmin Sun and Hyungmin Park**, Multiphase Flow & Flow Visualization Laboratory, Department of Mechanical Engineering, Seoul National University.
 
-https://github.com/user-attachments/assets/59fc1d9c-024b-4a27-827b-95d56e28d073
+https://github.com/user-attachments/assets/380c0e83-c29a-4802-8272-6cb51af0b49e
 
 *Demonstration Video: Overall Workflow of the Proposed Algorithm*
 
